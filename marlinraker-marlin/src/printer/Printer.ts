@@ -8,6 +8,7 @@ import PositionWatcher from "./watchers/PositionWatcher";
 import Watcher from "./watchers/Watcher";
 import { TVec2, TVec4 } from "../util/Utils";
 import MarlinRaker from "../MarlinRaker";
+import { ISerialTransport } from "./SerialTransport";
 
 interface IPauseState {
     x: number;
@@ -61,8 +62,8 @@ class Printer extends SerialGcodeDevice {
     public extrudedFilamentOffset!: number;
     public limits!: IPrinterLimits;
 
-    public constructor(marlinRaker: MarlinRaker, serialPort: string, baudRate: number) {
-        super(marlinRaker, serialPort, baudRate);
+    public constructor(marlinRaker: MarlinRaker, serialPort: string, baudRate: number, transport?: ISerialTransport) {
+        super(marlinRaker, serialPort, baudRate, transport);
 
         this.heaterManager = new HeaterManager(marlinRaker, this);
         this.capabilities = {};

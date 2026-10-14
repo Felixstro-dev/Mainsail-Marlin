@@ -6,6 +6,7 @@ import ParserUtil from "./ParserUtil";
 import MarlinRaker from "../MarlinRaker";
 import TypedEventEmitter from "../util/TypedEventEmitter";
 import { IPrinterEvents } from "./Printer";
+import { ISerialTransport } from "./SerialTransport";
 
 interface ICommand {
     gcode: string;
@@ -27,7 +28,7 @@ interface ISerialGcodeDeviceEvents {
 
 abstract class SerialGcodeDevice extends TypedEventEmitter<ISerialGcodeDeviceEvents & IPrinterEvents> {
 
-    public readonly serialPort: SerialPort;
+    public readonly serialPort: ISerialTransport;
     public hasEmergencyParser: boolean;
     protected readonly marlinRaker: MarlinRaker;
     protected readline: ReadLine;
@@ -38,7 +39,7 @@ abstract class SerialGcodeDevice extends TypedEventEmitter<ISerialGcodeDeviceEve
     private readonly connectionTimeout: number;
     protected abstract isPrusa: boolean;
 
-    protected constructor(marlinRaker: MarlinRaker, serialPort: string, baudRate: number) {
+    protected constructor(marlinRaker: MarlinRaker, serialPort: string, baudRate: number, transport?: ISerialTransport) {
         super();
 
         this.marlinRaker = marlinRaker;
@@ -49,7 +50,7 @@ abstract class SerialGcodeDevice extends TypedEventEmitter<ISerialGcodeDeviceEve
         this.maxConnectionAttempts = config.getNumber("serial.max_connection_attempts", 5);
         this.connectionTimeout = config.getNumber("serial.connection_timeout", 5000);
 
-        this.serialPort = new SerialPort({
+        this.serialPort = transport ?? new SerialPort({
             path: serialPort,
             baudRate: baudRate,
             autoOpen: false

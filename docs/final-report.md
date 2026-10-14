@@ -24,20 +24,34 @@ und die Kern-API-Aufrufe sind in den Analyse-Dokumenten festgehalten.
 
 ## Noch offen
 
-- Browser-Integration gegen einen laufenden Simulator;
 - saubere Raspberry-Pi-Installation;
 - echte Board-/Firmwaretests;
+- vollständige Druckzustandssemantik für Pause/Resume/Cancel;
 - vollständige Semantik der optionalen Klipper-Funktionen;
 - belastbare KIAUH-Erweiterung erst nach API-Test gegen die Zielversion.
 
 ## Tatsächliche Prüfergebnisse
 
 Frontend und Backend bauen erfolgreich. Das Mainsail-Frontend wurde in dieser
-Umgebung jedoch noch nicht gegen einen laufenden Marlinraker-WebSocket
-verbunden. Die Installation wurde nicht auf einem sauberen Raspberry Pi oder
-virtuellen System ausgeführt. npm-Audit meldete im Backend 1 kritische und 6
-hohe transitive Schwachstellen sowie im Frontend 1 hohe Schwachstelle; diese
-bleiben offene Release-Risiken.
+Umgebung gegen einen laufenden Marlinraker-Fake-Transport verbunden. HTTP,
+JSON-RPC-WebSocket, Upload und Cypress-Browserintegration bestanden. Die
+Installation wurde nicht auf einem sauberen Raspberry Pi oder virtuellen
+System ausgeführt. npm-Audit meldete im Backend 1 kritische, 6 hohe, 1
+moderate und 3 niedrige Produktionsmeldungen sowie im Frontend 1 hohe, 2
+moderate und 6 niedrige; diese bleiben offene Release-Risiken.
+
+Die Mainsail-Initialisierung benötigte `server.webcams.list`; der Adapter
+liefert nun eine leere Liste, wenn kein Webcam-Dienst vorhanden ist.
+Zusätzlich behandelt die Dateiliste fehlende optionale Verzeichnisse sicher
+als leer, sodass der Browserlauf auch ohne Theme-Fixtures bestanden hat.
+
+## Installations- und Umgebungsgrenzen
+
+`systemd-analyze verify deploy/mainsail-marlin.service` bestand. nginx war
+nicht installiert und konnte deshalb nicht mit `nginx -t` geprüft werden.
+Die Diagnose lief mit einem Testprefix; `diagnose.sh` hat keinen Dry-Run-
+Schalter. Es wurden keine echten Heiz-, Bewegungs- oder Not-Aus-Befehle an
+Hardware gesendet.
 
 ## Transparenz
 

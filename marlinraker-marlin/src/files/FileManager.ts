@@ -6,13 +6,17 @@ import { rootDir } from "../Server";
 import fs from "fs-extra";
 import SimpleNotification from "../api/notifications/SimpleNotification";
 import MarlinRaker from "../MarlinRaker";
-import diskUsage from "diskusage";
+import * as fsPromises from "node:fs/promises";
 
 interface IDiskUsage {
     total: number;
     used: number;
     free: number;
 }
+
+const statfs = (fsPromises as typeof fsPromises & {
+    statfs: (path: string) => Promise<{ blocks: number; bavail: number; bsize: number }>;
+}).statfs;
 
 interface IDirInfo {
     dirs: {
@@ -362,11 +366,13 @@ class FileManager {
     }
 
     public async getDiskUsage(dirpath: string): Promise<IDiskUsage> {
-        const usage = await diskUsage.check(dirpath);
+        const usage = await statfs(dirpath);
+        const total = usage.blocks * usage.bsize;
+        const free = usage.bavail * usage.bsize;
         return {
-            free: usage.available,
-            total: usage.total,
-            used: usage.total - usage.available
+            free,
+            total,
+            used: total - free
         };
     }
 }

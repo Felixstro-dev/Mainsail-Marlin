@@ -13,6 +13,7 @@ import PrinterObjectsListExecutor from "./executors/PrinterObjectsListExecutor";
 import PrinterObjectsSubscribeExecutor from "./executors/PrinterObjectsSubscribeExecutor";
 import PrinterRestartExecutor from "./executors/PrinterRestartExecutor";
 import ServerTemperatureStoreExecutor from "./executors/ServerTemperatureStoreExecutor";
+import ServerWebcamsListExecutor from "./executors/ServerWebcamsListExecutor";
 import ServerDatabaseGetItemExecutor from "./executors/ServerDatabaseGetItemExecutor";
 import ServerDatabasePostItemExecutor from "./executors/ServerDatabasePostItemExecutor";
 import PrinterGcodeHelpExecutor from "./executors/PrinterGcodeHelpExecutor";
@@ -122,7 +123,8 @@ class SocketHandler extends MessageHandler {
                 new ServerInfoExecutor(marlinRaker),
                 new ServerJobQueueStatusExecutor(marlinRaker),
                 new ServerRestartExecutor(marlinRaker),
-                new ServerTemperatureStoreExecutor(marlinRaker)
+                new ServerTemperatureStoreExecutor(marlinRaker),
+                new ServerWebcamsListExecutor()
             ] as IMethodExecutor<unknown, unknown>[]
         );
 

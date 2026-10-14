@@ -20,6 +20,7 @@ import KlipperCompat from "./compat/KlipperCompat";
 import Utils from "./util/Utils";
 import ObjectManager from "./printer/objects/ObjectManager";
 import TypedEventEmitter from "./util/TypedEventEmitter";
+import { FakeMarlinTransport } from "./printer/SerialTransport";
 
 interface IGcodeLog {
     message: string;
@@ -113,6 +114,11 @@ class MarlinRaker extends TypedEventEmitter<IMarlinRakerEvents> {
     public async connect(): Promise<void> {
         if (this.printer) return;
         this.setState("startup", "Connecting...");
+
+        if (process.env.MARLINRAKER_FAKE_SERIAL === "1") {
+            this.printer = new Printer(this, "fake://marlin", 115200, new FakeMarlinTransport());
+            return;
+        }
 
         let port: string | null = config.getString("serial.port", "auto");
         let baudRate: number | null = Number.parseInt(config.getStringOrNumber("serial.baud_rate", "auto") as string);

@@ -9,6 +9,7 @@ import { IMethodExecutor } from "./executors/IMethodExecutor";
 import PrinterObjectsListExecutor from "./executors/PrinterObjectsListExecutor";
 import PrinterRestartExecutor from "./executors/PrinterRestartExecutor";
 import ServerTemperatureStoreExecutor from "./executors/ServerTemperatureStoreExecutor";
+import ServerWebcamsListExecutor from "./executors/ServerWebcamsListExecutor";
 import MachineProcStatsExecutor from "./executors/MachineProcStatsExecutor";
 import ServerDatabaseGetItemExecutor from "./executors/ServerDatabaseGetItemExecutor";
 import AccessOneshotTokenExecutor from "./executors/AccessOneshotTokenExecutor";
@@ -110,7 +111,8 @@ class HttpHandler extends MessageHandler {
                 new ServerInfoExecutor(marlinRaker),
                 new ServerJobQueueStatusExecutor(marlinRaker),
                 new ServerRestartExecutor(marlinRaker),
-                new ServerTemperatureStoreExecutor(marlinRaker)
+                new ServerTemperatureStoreExecutor(marlinRaker),
+                new ServerWebcamsListExecutor()
             ] as IMethodExecutor<unknown, unknown>[]
         );
 
