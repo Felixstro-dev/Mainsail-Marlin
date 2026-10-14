@@ -136,8 +136,24 @@ if [[ -n "$SERIAL_GROUP" ]]; then
 fi
 
 install -d -m 0755 /etc/mainsail-marlin
-install -m 0644 "$ROOT_DIR/deploy/mainsail-marlin.service" /etc/systemd/system/mainsail-marlin.service
-install -m 0644 "$ROOT_DIR/deploy/nginx.conf" /etc/mainsail-marlin/nginx.conf
+sed "s#/opt/mainsail-marlin#$PREFIX#g" \
+    "$ROOT_DIR/deploy/mainsail-marlin.service" \
+    > /etc/systemd/system/mainsail-marlin.service
+sed "s#/opt/mainsail-marlin#$PREFIX#g" \
+    "$ROOT_DIR/deploy/nginx.conf" \
+    > /etc/mainsail-marlin/nginx.conf
+install -d -m 0755 /etc/nginx/sites-available /etc/nginx/sites-enabled
+ln -sfn /etc/mainsail-marlin/nginx.conf /etc/nginx/sites-enabled/mainsail-marlin
+if command -v nginx >/dev/null 2>&1; then
+    nginx -t
+else
+    die "nginx installation failed"
+fi
 systemctl daemon-reload
 systemctl enable mainsail-marlin.service
-log "installation completed; service is enabled but not started automatically"
+systemctl enable nginx
+systemctl restart nginx
+systemctl restart mainsail-marlin.service
+systemctl is-active --quiet mainsail-marlin.service ||
+    die "mainsail-marlin.service did not become active"
+log "installation completed; Mainsail and Marlinraker are running"

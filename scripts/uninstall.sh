@@ -23,6 +23,7 @@ if ((DRY_RUN)); then
 fi
 systemctl disable --now mainsail-marlin.service 2>/dev/null || true
 rm -f -- /etc/systemd/system/mainsail-marlin.service /etc/mainsail-marlin/nginx.conf
+rm -f -- /etc/nginx/sites-enabled/mainsail-marlin
 systemctl daemon-reload
 if ((KEEP_DATA)); then
     [[ -d "$PREFIX/data" ]] && mv -- "$PREFIX/data" "${PREFIX}.data-preserved.$(date -u +%Y%m%dT%H%M%SZ)"

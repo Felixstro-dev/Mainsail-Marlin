@@ -47,20 +47,33 @@ eine andere serielle Gruppe gewählt werden; die passende Gruppe kann mit
 Gruppe angegeben oder automatisch gefunden wird, wird keine serielle
 Berechtigung eingerichtet.
 
-Der Dienst wird installiert und aktiviert, aber nicht automatisch gestartet.
-Nach Prüfung des Druckeranschlusses kann er gestartet werden:
+Der Dienst und nginx werden installiert, aktiviert und nach erfolgreichem Build
+automatisch gestartet. Der Installer sendet dabei keine Druck- oder
+Heizbefehle; er startet nur den Adapter und dessen Weboberfläche.
 
 ```sh
-sudo systemctl start mainsail-marlin.service
 sudo systemctl status mainsail-marlin.service
-sudo cp deploy/nginx.conf /etc/nginx/sites-available/mainsail-marlin
-sudo ln -sf /etc/nginx/sites-available/mainsail-marlin \
-  /etc/nginx/sites-enabled/mainsail-marlin
-sudo nginx -t && sudo systemctl reload nginx
+sudo systemctl status nginx
+```
+
+Ein Update des installierten Systems ist mit einem Befehl möglich:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/Felixstro-dev/Mainsail-Marlin/master/scripts/update-online.sh | bash
+```
+
+Das Update lädt den aktuellen Branch, erstellt ein Backup, stoppt den Adapter,
+installiert Abhängigkeiten neu, baut Frontend und Backend, validiert nginx und
+startet die Dienste wieder. Ein Probelauf ist ebenfalls möglich:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/Felixstro-dev/Mainsail-Marlin/master/scripts/update-online.sh \
+  | bash -s -- --dry-run
 ```
 
 Die reale Raspberry-Pi-Unterstützung ist noch `UNTESTED`; es wurde kein Image
-und keine saubere Pi-Installation erzeugt.
+und keine saubere Pi-Installation erzeugt. Der automatisierte Ablauf ist für
+Debian/Ubuntu mit systemd, nginx und apt-get vorgesehen.
 
 Marlinraker verwendet aktuell nicht mehr das native Paket `diskusage`. Die
 Laufzeitabfrage des Dateisystems nutzt `fs.promises.statfs`, wodurch
