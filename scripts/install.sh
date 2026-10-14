@@ -30,6 +30,47 @@ run() {
     fi
 }
 
+node_is_compatible() {
+    command -v node >/dev/null 2>&1 || return 1
+    node -e '
+        const [major, minor] = process.versions.node.split(".").map(Number);
+        process.exit(
+            major > 22 || (major === 22 && minor >= 12) ||
+            (major === 20 && minor >= 19) ? 0 : 1
+        );
+    ' >/dev/null 2>&1
+}
+
+install_system_dependencies() {
+    command -v apt-get >/dev/null 2>&1 ||
+        die "automatic dependency installation currently requires Debian/Ubuntu with apt-get"
+
+    if ((DRY_RUN)); then
+        log "dry-run: would install system dependencies: ca-certificates curl git build-essential python3 nginx libudev-dev"
+        if ! node_is_compatible; then
+            log "dry-run: would install Node.js 22 because a compatible Node.js version is not available"
+        fi
+        return
+    fi
+
+    log "installing system dependencies"
+    apt-get update
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        ca-certificates curl git build-essential python3 nginx libudev-dev
+
+    if ! node_is_compatible; then
+        log "installing Node.js 22"
+        curl --fail --silent --show-error --location https://deb.nodesource.com/setup_22.x |
+            bash -
+        apt-get install -y nodejs
+    fi
+
+    if ! command -v npm >/dev/null 2>&1; then
+        log "installing npm"
+        apt-get install -y npm
+    fi
+}
+
 while (($#)); do
     case "$1" in
         --prefix) (($# >= 2)) || die "--prefix requires a path"; PREFIX="$2"; shift 2 ;;
@@ -47,14 +88,17 @@ if [[ ${EUID:-$(id -u)} -ne 0 && $DRY_RUN -eq 0 ]]; then
     die "run as root for a real installation, or use --dry-run"
 fi
 
-command -v node >/dev/null || die "node is required"
-command -v npm >/dev/null || die "npm is required"
-command -v systemctl >/dev/null || die "systemctl is required"
+install_system_dependencies
 
 if ((DRY_RUN)); then
-    log "dry-run: prerequisites passed; no files or services will be changed"
+    log "dry-run: prerequisites and dependency installation plan passed; no files or services will be changed"
     exit 0
 fi
+
+command -v node >/dev/null || die "node installation failed"
+command -v npm >/dev/null || die "npm installation failed"
+command -v systemctl >/dev/null || die "systemctl is required"
+node_is_compatible || die "Node.js 20.19+ or 22.12+ is required"
 
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 BACKUP="${PREFIX}.backup.${STAMP}"
