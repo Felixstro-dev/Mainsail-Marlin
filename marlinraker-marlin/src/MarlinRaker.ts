@@ -21,6 +21,7 @@ import Utils from "./util/Utils";
 import ObjectManager from "./printer/objects/ObjectManager";
 import TypedEventEmitter from "./util/TypedEventEmitter";
 import { FakeMarlinTransport } from "./printer/SerialTransport";
+import TimelapseManager from "./timelapse/TimelapseManager";
 
 interface IGcodeLog {
     message: string;
@@ -54,6 +55,7 @@ class MarlinRaker extends TypedEventEmitter<IMarlinRakerEvents> {
     public readonly systemInfo: SystemInfo;
     public readonly klipperCompat: KlipperCompat;
     public readonly objectManager: ObjectManager;
+    public readonly timelapse: TimelapseManager;
     public printer?: Printer;
 
     private static instance: MarlinRaker;
@@ -82,6 +84,7 @@ class MarlinRaker extends TypedEventEmitter<IMarlinRakerEvents> {
         this.systemInfo = new SystemInfo(this);
         this.klipperCompat = new KlipperCompat(this);
         this.objectManager = new ObjectManager(this);
+        this.timelapse = new TimelapseManager();
 
         process.removeAllListeners("uncaughtException");
         process.on("uncaughtException", async (e) => {

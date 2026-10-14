@@ -59,12 +59,19 @@ Stand: 2026-10-14
   geprüft.
 - [x] NPM-Audits mit vollständigem JSON-Ergebnis untersucht; keine pauschalen
   Breaking Updates durchgeführt.
+- [x] Hardwarefreie Timelapse-Kompatibilität ergänzt: Einstellungen,
+  Validierung und `lastframeinfo` stehen über WebSocket/HTTP bereit.
+- [x] Bestätigte HIGH-Pfad-Traversal-Schwachstelle in Dateioperationen
+  behoben und durch Root-Grenzen abgesichert.
 
 ## Offene Punkte
 
 - Pause/Resume/Cancel ändern im Fake-Workflow noch nicht belastbar
   `print_stats`/`virtual_sdcard`; die Methoden liefern aktuell nur die
   vorhandene kontrollierte Adapterantwort.
+- Timelapse rendert weiterhin keine Videos und nimmt ohne Kamera/FFmpeg keine
+  echten Frames auf; die implementierte Funktion ist der sichere API- und
+  Einstellungs-Fallback.
 - Raspberry-Pi-Neuinstallation, echter Hardwarebetrieb und `shellcheck` sind
   nicht ausgeführt.
 - KIAUH-Erweiterung ist wegen der Klipper-zentrierten Zielarchitektur noch nicht implementiert.

@@ -19,7 +19,7 @@ Statuswerte: `IMPLEMENTED`, `PARTIAL`, `MISSING`, `KLIPPER_DEPENDENT`,
 | Historie | `server.history.*` | Moonraker-Datenbank | Host-seitig | IMPLEMENTED | IMPLEMENTED | Initialisierung LIVE bestanden | P2 |
 | Makros | `gcode_macro` | Klipper-Makros | konfigurierte Adapter-Makros | PARTIAL | PARTIAL | UNTESTED | P2 |
 | Bed mesh | `bed_mesh` | Klipper-Objekt | nicht generisch garantiert | NOT_APPLICABLE | OPTIONAL | nicht ausgeführt | P2 |
-| Timelapse | optionaler Dienst | separate Integration | kein Marlin-Kernfeature | OPTIONAL | OPTIONAL | nicht ausgeführt | P2 |
+| Timelapse | optionaler Dienst | separate Integration | kein Marlin-Kernfeature | PARTIAL | IMPLEMENTED | API/Browser-Initialisierung getestet; kein Rendering | P2 |
 | Update Manager | Git-/Systemupdates | Moonraker-Komponente | Host-seitig möglich | PARTIAL | OPTIONAL | nicht ausgeführt | P2 |
 | Webcam | separater Stream | Moonraker-Konfiguration | unabhängig von Marlin | OPTIONAL | IMPLEMENTED | leere Liste LIVE; kein Stream getestet | P2 |
 
@@ -29,3 +29,7 @@ automatisch semantisch vollständig kompatibel.
 Der Adapter registriert `server.webcams.list` als leere, sichere Liste, damit
 Mainsail ohne optionalen Webcam-Dienst initialisieren kann. Druckzustände und
 Historiensemantik bleiben gegenüber echter Marlin-Firmware eingeschränkt.
+Die Timelapse-Kompatibilität stellt Mainsails Einstellungs- und
+`lastframeinfo`-Verträge bereit. Frame-Aufnahme und FFmpeg-Rendering bleiben
+bewusst deaktiviert, solange keine Kamera- und Encoderintegration konfiguriert
+ist.

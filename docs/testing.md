@@ -12,7 +12,7 @@ Am 2026-10-14 wurden folgende hardwarefreie Prüfungen ausgeführt:
 
 | Prüfung | Ergebnis |
 |---|---|
-| `marlinraker-marlin/npm run test:unit` | BESTANDEN, 4/4 Tests |
+| `marlinraker-marlin/npm run test:unit` | BESTANDEN, 6/6 Tests |
 | `marlinraker-marlin/npm run build` | BESTANDEN: ESLint, TypeScript, esbuild und Paketkopie |
 | `mainsail-marlin/npm run test:unit` | BESTANDEN, 46/46 Tests |
 | `mainsail-marlin/npm run lint` | BESTANDEN |
@@ -25,6 +25,7 @@ Am 2026-10-14 wurden folgende hardwarefreie Prüfungen ausgeführt:
 | Multipart-Upload `demo.gcode` | BESTANDEN |
 | Cypress Dashboard-Smoke-Test | BESTANDEN |
 | Cypress Marlinraker-Integration | BESTANDEN: UI, Temperaturdaten, Datei, Konsole und WS-URL |
+| Timelapse-API Unit-Tests | BESTANDEN, sichere Defaults und Validierung |
 | `systemd-analyze verify deploy/mainsail-marlin.service` | BESTANDEN |
 | `scripts/diagnose.sh --prefix /tmp/mainsail-marlin-test` | BESTANDEN |
 

@@ -154,8 +154,7 @@ class FileManager {
 
         const targetDir = path.join(root, filepath).replaceAll("\\", "/");
         await this.checkWriteProtected(targetDir);
-
-        const destination = path.resolve(rootDir, root, filepath, filename);
+        const destination = this.resolveManagedPath(path.join(targetDir, filename));
 
         await fs.mkdirs(path.dirname(destination));
         await fs.copy(source, destination);
@@ -208,12 +207,28 @@ class FileManager {
         return currentDir ?? null;
     }
 
+    private resolveManagedPath(filepath: string): string {
+        const normalized = filepath.replaceAll("\\", "/");
+        const parts = normalized.split("/").filter(Boolean);
+        const root = parts[0];
+        if (!root || !["gcodes", "config"].includes(root) || parts.slice(1).includes("..")) {
+            throw new Error("Path outside managed roots");
+        }
+
+        const managedRoot = path.resolve(rootDir, root);
+        const resolved = path.resolve(rootDir, ...parts);
+        if (resolved !== managedRoot && !resolved.startsWith(`${managedRoot}${path.sep}`)) {
+            throw new Error("Path outside managed roots");
+        }
+        return resolved;
+    }
+
     public async createDirectory(dirpath: string): Promise<IFileChangeNotification> {
 
         const dir = await this.checkWriteProtected(dirpath);
 
         const root = dirpath.split("/").filter((s) => s)[0];
-        const diskPath = path.join(rootDir, dirpath);
+        const diskPath = this.resolveManagedPath(dirpath);
         if (dir || await fs.pathExists(diskPath)) {
             throw new Error("Directory already exists");
         }
@@ -289,9 +304,9 @@ class FileManager {
         await this.checkWriteProtected(dest);
 
         const sourceRoot = source.split("/").filter((s) => s)[0];
-        const sourceOnDisk = path.join(rootDir, source);
+        const sourceOnDisk = this.resolveManagedPath(source);
         const destRoot = dest.split("/").filter((s) => s)[0];
-        const destOnDisk = path.join(rootDir, dest);
+        const destOnDisk = this.resolveManagedPath(dest);
 
         if (!await fs.pathExists(sourceOnDisk)) {
             throw new Error("Source doesn't exist");
@@ -344,7 +359,7 @@ class FileManager {
     public async deleteFile(filepath: string): Promise<IFileChangeNotification> {
 
         const root = filepath.split("/").filter((s) => s)[0];
-        const diskPath = path.join(rootDir, filepath);
+        const diskPath = this.resolveManagedPath(filepath);
         const stat = await fs.stat(diskPath);
         if (!stat.isFile()) throw new Error("Not a file");
 

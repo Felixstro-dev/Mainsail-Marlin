@@ -54,6 +54,9 @@ import MachineServicesStartExecutor from "./executors/MachineServicesStartExecut
 import MachineServicesStopExecutor from "./executors/MachineServicesStopExecutor";
 import PrinterObjectsQueryExecutor from "./executors/PrinterObjectsQueryExecutor";
 import PrinterObjectsSubscribeExecutor from "./executors/PrinterObjectsSubscribeExecutor";
+import MachineTimelapseGetSettingsExecutor from "./executors/MachineTimelapseGetSettingsExecutor";
+import MachineTimelapsePostSettingsExecutor from "./executors/MachineTimelapsePostSettingsExecutor";
+import MachineTimelapseLastFrameInfoExecutor from "./executors/MachineTimelapseLastFrameInfoExecutor";
 
 class HttpHandler extends MessageHandler {
 
@@ -73,6 +76,9 @@ class HttpHandler extends MessageHandler {
                 new MachineServicesStopExecutor(marlinRaker),
                 new MachineShutdownExecutor(),
                 new MachineSystemInfoExecutor(marlinRaker),
+                new MachineTimelapseGetSettingsExecutor(marlinRaker),
+                new MachineTimelapseLastFrameInfoExecutor(marlinRaker),
+                new MachineTimelapsePostSettingsExecutor(marlinRaker),
                 new MachineUpdateClientExecutor(marlinRaker),
                 new MachineUpdateFullExecutor(marlinRaker),
                 new MachineUpdateStatusExecutor(marlinRaker),

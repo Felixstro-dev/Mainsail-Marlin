@@ -32,3 +32,11 @@ Express-abhängige DoS-/ReDoS-Ketten. Die Frontend-Hochmeldung betrifft
 Versionssprung. Der native `diskusage`-Baustein wurde dagegen entfernt, weil
 er unter Node.js 25 nicht baubar war; `fs.promises.statfs` benötigt keine
 native Kompilierung.
+Die bestätigte HIGH-Dateipfad-Schwachstelle wurde behoben: Dateioperationen
+kanonisieren Clientpfade und erlauben nur Ziele unter `rootDir/gcodes` oder
+`rootDir/config`; absolute Pfade und `..`-Traversal werden abgewiesen.
+
+Die verbleibenden Audit-Meldungen wurden nicht automatisch mit
+Major-Upgrades verändert. Ihre Behebung erfordert weiterhin kontrollierte
+Express-/ws- beziehungsweise Vue-/Vuetify-Upgrades mit separater
+Kompatibilitätsprüfung.

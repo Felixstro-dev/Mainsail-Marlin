@@ -45,7 +45,8 @@ class ServerInfoExecutor implements IMethodExecutor<undefined, IResult> {
             "database",
             "data_store",
             "proc_stats",
-            "history"
+            "history",
+            "timelapse"
         ];
         if (this.marlinRaker.updateManager.updatables.size) {
             components.push("update_manager");

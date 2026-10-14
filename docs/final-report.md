@@ -27,6 +27,7 @@ und die Kern-API-Aufrufe sind in den Analyse-Dokumenten festgehalten.
 - saubere Raspberry-Pi-Installation;
 - echte Board-/Firmwaretests;
 - vollständige Druckzustandssemantik für Pause/Resume/Cancel;
+- echte Timelapse-Frameaufnahme und FFmpeg-Rendering;
 - vollständige Semantik der optionalen Klipper-Funktionen;
 - belastbare KIAUH-Erweiterung erst nach API-Test gegen die Zielversion.
 
@@ -44,6 +45,9 @@ Die Mainsail-Initialisierung benötigte `server.webcams.list`; der Adapter
 liefert nun eine leere Liste, wenn kein Webcam-Dienst vorhanden ist.
 Zusätzlich behandelt die Dateiliste fehlende optionale Verzeichnisse sicher
 als leer, sodass der Browserlauf auch ohne Theme-Fixtures bestanden hat.
+Zusätzlich stellt der Adapter die Mainsail-Timelapse-API für Einstellungen und
+`lastframeinfo` bereit. Ohne Kamera und FFmpeg werden keine Frames oder Videos
+vorgetäuscht.
 
 ## Installations- und Umgebungsgrenzen
 
