@@ -33,6 +33,11 @@ SOURCE_DIR="$(find "$TEMP_DIR" -mindepth 1 -maxdepth 1 -type d -name 'Mainsail-M
 [[ -n "$SOURCE_DIR" ]] || die "downloaded archive did not contain the project"
 
 if [[ ${EUID:-$(id -u)} -ne 0 ]]; then
+    for argument in "$@"; do
+        if [[ "$argument" == "--dry-run" ]]; then
+            exec bash "$SOURCE_DIR/scripts/install.sh" "$@"
+        fi
+    done
     command -v sudo >/dev/null 2>&1 || die "sudo is required when not running as root"
     exec sudo bash "$SOURCE_DIR/scripts/install.sh" "$@"
 fi
