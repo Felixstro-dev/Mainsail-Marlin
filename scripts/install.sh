@@ -100,6 +100,10 @@ command -v npm >/dev/null || die "npm installation failed"
 command -v systemctl >/dev/null || die "systemctl is required"
 node_is_compatible || die "Node.js 20.19+ or 22.12+ is required"
 
+if [[ -z "$SERIAL_GROUP" ]] && getent group dialout >/dev/null; then
+    SERIAL_GROUP="dialout"
+fi
+
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 BACKUP="${PREFIX}.backup.${STAMP}"
 if [[ -e "$PREFIX" ]]; then
