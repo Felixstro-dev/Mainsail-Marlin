@@ -1,0 +1,9 @@
+upstream/
+**/node_modules/
+**/dist/
+**/.cache/
+**/coverage/
+*.log
+marlinraker-marlin/marlinraker_files/
+mainsail-marlin/cypress/videos/
+mainsail-marlin/cypress/screenshots/

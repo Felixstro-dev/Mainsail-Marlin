@@ -1,0 +1,19 @@
+[Unit]
+Description=Mainsail-Marlin Marlin adapter
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=mainsail
+WorkingDirectory=/opt/mainsail-marlin/marlinraker-marlin
+Environment=NODE_ENV=production
+Environment=MARLINRAKER_DIR=/var/lib/mainsail-marlin
+ExecStart=/usr/bin/node /opt/mainsail-marlin/marlinraker-marlin/dist/index.js
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

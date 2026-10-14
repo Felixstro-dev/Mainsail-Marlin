@@ -1,0 +1,62 @@
+[
+  {
+    "method": "server.info",
+    "transport": "websocket-jsonrpc",
+    "caller": "src/store/farm/printer/actions.ts connect",
+    "parameters": {},
+    "response": "object containing klippy_connected and server metadata",
+    "status_fields": ["klippy_connected"],
+    "usage": "initial connection and firmware readiness",
+    "priority": "P1",
+    "klipper_dependency": "field name is inherited from Moonraker; value is adapter state",
+    "reference": "mainsail-marlin/src/store/farm/printer/actions.ts"
+  },
+  {
+    "method": "printer.objects.list",
+    "transport": "websocket-jsonrpc",
+    "caller": "src/store/farm/printer/actions.ts initPrinter",
+    "parameters": {},
+    "response": "object with objects array",
+    "status_fields": ["objects"],
+    "usage": "discover status objects",
+    "priority": "P1",
+    "klipper_dependency": "object names originate in Klipper; adapter exposes only meaningful Marlin objects",
+    "reference": "mainsail-marlin/src/store/farm/printer/actions.ts"
+  },
+  {
+    "method": "printer.objects.subscribe",
+    "transport": "websocket-jsonrpc",
+    "caller": "src/store/farm/printer/actions.ts getObjectsList",
+    "parameters": {"objects": "object names mapped to null attributes"},
+    "response": "status object",
+    "status_fields": ["status"],
+    "usage": "live printer updates",
+    "priority": "P1",
+    "klipper_dependency": "protocol shape is Moonraker-compatible; values are normalized from Marlin",
+    "reference": "mainsail-marlin/src/store/farm/printer/actions.ts"
+  },
+  {
+    "method": "printer.gcode.script",
+    "transport": "websocket-jsonrpc",
+    "caller": "console and control components",
+    "parameters": {"script": "G-code string"},
+    "response": "success or error",
+    "status_fields": ["gcode"],
+    "usage": "console, print control and supported actions",
+    "priority": "P1",
+    "klipper_dependency": "none in transport; command semantics depend on Marlin configuration",
+    "reference": "mainsail-marlin/src/components/console/ and src/store/printer/actions.ts"
+  },
+  {
+    "method": "server.files.upload",
+    "transport": "http-multipart",
+    "caller": "src/store/files/actions.ts uploadFile",
+    "parameters": {"file": "multipart file", "root": "gcodes or config", "path": "relative path"},
+    "response": "object containing item.path",
+    "status_fields": ["item.path"],
+    "usage": "upload print or configuration files",
+    "priority": "P1",
+    "klipper_dependency": "filesystem contract is Moonraker-like; storage is host-side",
+    "reference": "mainsail-marlin/src/store/files/actions.ts"
+  }
+]
