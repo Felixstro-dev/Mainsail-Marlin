@@ -29,7 +29,7 @@ SOURCE_DIR="$(find "$TEMP_DIR" -mindepth 1 -maxdepth 1 -type d -name 'Mainsail-M
 
 if [[ ${EUID:-$(id -u)} -ne 0 ]]; then
     for argument in "$@"; do
-        if [[ "$argument" == "--dry-run" ]]; then
+        if [[ "$argument" == "--dry-run" || "$argument" == "--help" || "$argument" == "-h" ]]; then
             exec bash "$SOURCE_DIR/scripts/update.sh" \
                 --prefix "$PREFIX" --source-dir "$SOURCE_DIR" "$@"
         fi
