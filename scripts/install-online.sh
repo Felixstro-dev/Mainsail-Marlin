@@ -2,6 +2,7 @@
 set -Eeuo pipefail
 
 REPOSITORY="https://github.com/Felixstro-dev/Mainsail-Marlin"
+CODELOAD_REPOSITORY="https://codeload.github.com/Felixstro-dev/Mainsail-Marlin"
 REF="${MAINSAIL_MARLIN_REF:-master}"
 TEMP_DIR="$(mktemp -d)"
 
@@ -25,7 +26,7 @@ command -v tar >/dev/null 2>&1 || die "tar is required"
 ARCHIVE="$TEMP_DIR/mainsail-marlin.tar.gz"
 log "downloading Mainsail-Marlin from $REPOSITORY ($REF)"
 curl --fail --silent --show-error --location \
-    "$REPOSITORY/archive/refs/heads/$REF.tar.gz" \
+    "$CODELOAD_REPOSITORY/tar.gz/refs/heads/$REF" \
     --output "$ARCHIVE"
 
 tar -xzf "$ARCHIVE" -C "$TEMP_DIR"
